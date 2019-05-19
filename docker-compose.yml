@@ -1,0 +1,30 @@
+version: '3'
+services: 
+  app:
+    build:
+      context: .
+    volumes: 
+      - "./go:/go"
+    container_name: "ready-to-serve-go-service"
+    ports: 
+      - "8080:8080"
+    environment: 
+      - PORT=8080
+      - DIR_CERTIFICATE=./storage/local.cert
+      - DIR_PRIVATE_KEY=./storage/local.cert
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_HOST=localhost
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=postgres
+    command: 
+      - go run main.go
+  db:
+    image: postgres:latest
+    restart: always
+    ports: 
+      - 5432:5432
+    environment: 
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
